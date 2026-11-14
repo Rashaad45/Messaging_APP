@@ -1,0 +1,26 @@
+# Overrides on top of detekt's default config (buildUponDefaultConfig = true).
+# Formatting is handled by ktlint, so detekt focuses on code smells.
+
+naming:
+  FunctionNaming:
+    # Composable functions are PascalCase by convention.
+    ignoreAnnotated: ['Composable']
+  TopLevelPropertyNaming:
+    constantPattern: '[A-Z][A-Za-z0-9_]*'
+
+complexity:
+  LongParameterList:
+    # Composables commonly take many parameters (state + event lambdas + modifier).
+    ignoreAnnotated: ['Composable']
+  LongMethod:
+    ignoreAnnotated: ['Composable']
+  TooManyFunctions:
+    ignoreAnnotatedFunctions: ['Preview']
+
+style:
+  MagicNumber:
+    ignorePropertyDeclaration: true
+    ignoreAnnotated: ['Composable', 'Preview']
+    excludes: ['**/test/**', '**/androidTest/**', '**/ui/theme/**']
+  UnusedPrivateMember:
+    ignoreAnnotated: ['Preview']
