@@ -1,0 +1,39 @@
+# Gradle / build output
+.gradle/
+build/
+**/build/
+.kotlin/
+local.properties
+captures/
+*.apk
+*.aab
+
+# IDEs
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
+# Firebase config & secrets — never commit (see docs/DECISIONS.md D-007)
+google-services.json
+*.keystore
+*.jks
+keystore.properties
+service-account*.json
+.env
+.env.*
+
+# Firebase CLI / emulators
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+database-debug.log*
+pubsub-debug.log*
+emulator-data/
+
+# Node (Cloud Functions)
+node_modules/
+functions/lib/
+npm-debug.log*
