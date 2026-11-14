@@ -1,0 +1,7 @@
+<resources>
+    <!-- Window theme shown before Compose draws its first frame; Compose's MaterialTheme
+         handles everything after that. -->
+    <style name="Theme.Messenger" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+</resources>
