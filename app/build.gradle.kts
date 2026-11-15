@@ -8,6 +8,9 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+    // Reads app/google-services.json and generates Firebase config resources
+    // (incl. R.string.default_web_client_id used for Google Sign-In).
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -46,6 +49,16 @@ android {
         unitTests {
             // Robolectric needs merged Android resources to run Compose tests on the JVM.
             isIncludeAndroidResources = true
+            // Windows Smart App Control blocks Robolectric's unsigned native DLLs (runtime, Conscrypt),
+            // so on Windows we use its pure-Java implementations. CI (Linux) keeps the
+            // default native mode, which is closer to a real device. See docs/DECISIONS.md D-012.
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                all {
+                    it.systemProperty("robolectric.graphicsMode", "LEGACY")
+                    it.systemProperty("robolectric.sqliteMode", "LEGACY")
+                    it.systemProperty("robolectric.conscryptMode", "OFF")
+                }
+            }
         }
     }
 
@@ -79,6 +92,14 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.play.services)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
@@ -91,6 +112,7 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
