@@ -1,0 +1,81 @@
+rules_version = '2';
+
+// Security rules are the real security boundary: the app can be modified, these cannot.
+// Anything not explicitly allowed below is denied.
+// Tested in firestore-tests/rules.test.js against the Firestore emulator.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // Note: build paths segment by segment. $(x) inserts ONE path segment, so
+    // /documents/$('users/' + uid) would look up a single segment "users%2F<uid>".
+    function userDoc(uid) {
+      return /databases/$(database)/documents/users/$(uid);
+    }
+
+    function usernameDoc(name) {
+      return /databases/$(database)/documents/usernames/$(name);
+    }
+
+    function isValidUsername(name) {
+      return name is string && name.matches('^[a-z0-9_]{3,20}$');
+    }
+
+    // Client limit is 50 code points; the server allows some slack for how rules count characters.
+    function isValidDisplayName(name) {
+      return name is string && name.size() >= 1 && name.size() <= 100 && name.trim() == name;
+    }
+
+    // ---------------------------------------------------------------- users
+    match /users/{uid} {
+      // Public profile: any signed-in user can read it (needed for search and chat headers).
+      allow read: if signedIn();
+
+      // Created exactly once, together with the matching usernames/{username} lock
+      // (getAfter = the state *after* this batch/transaction would be applied).
+      allow create: if isSelf(uid)
+        && request.resource.data.keys().hasOnly(['username', 'displayName', 'displayNameLower', 'createdAt'])
+        && isValidUsername(request.resource.data.username)
+        && isValidDisplayName(request.resource.data.displayName)
+        && request.resource.data.displayNameLower == request.resource.data.displayName.lower()
+        && request.resource.data.createdAt == request.time
+        && getAfter(usernameDoc(request.resource.data.username)).data.uid == uid;
+
+      // Only the display name may change later; the username is permanent in v1.
+      allow update: if isSelf(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'displayNameLower'])
+        && isValidDisplayName(request.resource.data.displayName)
+        && request.resource.data.displayNameLower == request.resource.data.displayName.lower();
+
+      // Account deletion is done server-side by a Cloud Function (M5), not by clients.
+      allow delete: if false;
+    }
+
+    // ------------------------------------------------------------ usernames
+    // One document per claimed username = a uniqueness lock.
+    match /usernames/{username} {
+      // Signed-in users may check availability and resolve username -> uid.
+      allow read: if signedIn();
+
+      // "create" fails if the document already exists, which is what makes a name unique.
+      // The user's profile must be created in the same write with this exact username,
+      // and must not exist yet: each account claims exactly one username, once.
+      allow create: if signedIn()
+        && isValidUsername(username)
+        && request.resource.data.keys().hasOnly(['uid'])
+        && request.resource.data.uid == request.auth.uid
+        && !exists(userDoc(request.auth.uid))
+        && getAfter(userDoc(request.auth.uid)).data.username == username;
+
+      // Claims are permanent; release happens server-side on account deletion (M5).
+      allow update, delete: if false;
+    }
+  }
+}
