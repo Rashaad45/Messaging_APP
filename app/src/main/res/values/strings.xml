@@ -1,4 +1,63 @@
 <resources>
     <string name="app_name">Messenger</string>
-    <string name="welcome_tagline">Private 1:1 chats, online or offline.</string>
+    <string name="app_tagline">Private 1:1 chats, online or offline.</string>
+    <string name="loading">Loading</string>
+
+    <!-- Sign in -->
+    <string name="sign_in_title">Welcome back</string>
+    <string name="sign_up_title">Create your account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Create account</string>
+    <string name="switch_to_sign_up">New here? Create an account</string>
+    <string name="switch_to_sign_in">Already have an account? Sign in</string>
+    <string name="or">or</string>
+    <string name="continue_with_google">Continue with Google</string>
+
+    <string name="error_email_invalid">Enter a valid email address</string>
+    <string name="error_password_empty">Enter your password</string>
+    <plurals name="password_hint_sign_up">
+        <item quantity="one">At least %1$d character</item>
+        <item quantity="other">At least %1$d characters</item>
+    </plurals>
+    <plurals name="error_password_too_short">
+        <item quantity="one">Use at least %1$d character</item>
+        <item quantity="other">Use at least %1$d characters</item>
+    </plurals>
+
+    <string name="auth_error_invalid_credentials">Incorrect email or password</string>
+    <string name="auth_error_email_in_use">An account with this email already exists. Try signing in.</string>
+    <string name="auth_error_weak_password">That password is too weak. Try a longer one.</string>
+    <string name="auth_error_invalid_email">That email address isn\'t valid</string>
+    <string name="auth_error_user_disabled">This account has been disabled</string>
+    <string name="auth_error_different_method">This email uses a different sign-in method. Try Google or email instead.</string>
+    <string name="auth_error_too_many_requests">Too many attempts. Wait a moment and try again.</string>
+    <string name="auth_error_network">No internet connection. Check your connection and try again.</string>
+    <string name="auth_error_google_unavailable">Google sign-in isn\'t available on this device. Add a Google account in Settings, or use email.</string>
+    <string name="error_unknown">Something went wrong. Please try again.</string>
+
+    <!-- Profile setup -->
+    <string name="profile_setup_title">Pick a username</string>
+    <string name="profile_setup_subtitle">People find you by your username. It can\'t be changed later.</string>
+    <string name="username">Username</string>
+    <string name="username_hint">3–20 characters: a–z, 0–9 and _</string>
+    <string name="display_name">Display name</string>
+    <string name="display_name_hint">Shown in chats. You can change it later.</string>
+    <string name="continue_button">Continue</string>
+    <string name="error_username_too_short">At least 3 characters</string>
+    <string name="error_username_too_long">At most 20 characters</string>
+    <string name="error_username_invalid_chars">Only a–z, 0–9 and _ are allowed</string>
+    <string name="error_display_name_empty">Enter a display name</string>
+    <string name="error_display_name_too_long">At most 50 characters</string>
+    <string name="profile_error_username_taken">That username is taken. Try another one.</string>
+    <string name="profile_error_network">You\'re offline. Connect to the internet to claim a username.</string>
+    <string name="profile_error_permission">The server rejected this profile. Please try again.</string>
+
+    <!-- Home (placeholder until M3) -->
+    <string name="home_signed_in_as">Signed in as</string>
+    <string name="home_coming_soon">Conversations arrive in the next milestone.</string>
+    <string name="sign_out">Sign out</string>
 </resources>

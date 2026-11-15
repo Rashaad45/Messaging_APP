@@ -4,12 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.rashaad.messenger.navigation.MessengerNavHost
+import com.rashaad.messenger.navigation.MessengerApp
 import com.rashaad.messenger.ui.theme.MessengerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * The app's only Activity. Every screen is a Compose destination inside [MessengerNavHost].
+ * The app's only Activity. Every screen is a Compose destination inside [MessengerApp].
  */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MessengerTheme {
-                MessengerNavHost()
+                MessengerApp()
             }
         }
     }
