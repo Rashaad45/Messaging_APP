@@ -1,6 +1,7 @@
 # Firestore data model
 
-> Status: design approved in planning. Security rules and indexes are implemented in M2–M3.
+> Status: `users` and `usernames` are implemented, with rules in `firestore.rules` and tests in
+> `firestore-tests/` (M2). Conversations and messages arrive in M3–M4.
 
 ```
 users/{uid}                          public profile: any signed-in user can read
